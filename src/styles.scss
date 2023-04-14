@@ -24,6 +24,7 @@ p {
 label {
   display: block;
   margin-bottom: 10px;
+
   span {
     display: block;
     margin-bottom: 5px;
@@ -38,9 +39,11 @@ label {
   outline: 0;
   width: 100%;
   font-size: 14px;
+
   &:focus {
     border-color: #e3e3e3;
   }
+
   &--select {
     background-image: url("/assets/img/icon/down.svg");
     background-position: 98% center;
@@ -49,6 +52,7 @@ label {
     -webkit-appearance: none;
     -moz-appearance: none;
   }
+
   &--textarea {
     resize: vertical;
   }
@@ -63,18 +67,27 @@ label {
   border: 0;
   border-radius: 4px;
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+
   &--grey {
     background: #f7f7f7;
     color: #444;
   }
+
   &--green {
     background: #01a3a4;
     color: #fff;
   }
+
+  &--red {
+    background: #e66262;
+    color: #fff;
+  }
+
   &:hover {
     opacity: 0.8;
     transform: translateY(-2px);
   }
+
   &:disabled {
     cursor: no-drop;
   }
