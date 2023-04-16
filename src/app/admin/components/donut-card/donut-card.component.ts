@@ -1,11 +1,23 @@
 import {Component, Input} from '@angular/core';
 import {Donut} from '../../models/donut.model';
+import {RouterModule} from '@angular/router';
+import {CurrencyPipe, NgClass, NgSwitch, NgSwitchCase} from '@angular/common';
 
 @Component({
   selector: 'donut-card',
+  standalone: true,
+  imports: [
+    RouterModule,
+    NgClass,
+    NgSwitch,
+    NgSwitchCase,
+    CurrencyPipe
+  ],
   template: `
-    <div class="donut-card" [ngStyle]="{border: donut.promo ? '2px solid #eee' : 'none',
-'font-size.rem': 20}">
+    <a
+      class="donut-card"
+      [routerLink]="[donut.id]"
+      [ngClass]="{'donut-card-promo': donut.promo}">
       <img src="/assets/img/{{ donut.icon }}.svg"
            [alt]="donut.name"
            class="donut-card-icon">
@@ -18,11 +30,10 @@ import {Donut} from '../../models/donut.model';
         </p>
         <p class="donut-card-price">{{ donut.price / 100 | currency: 'USD':'symbol'}}</p>
       </div>
-    </div>
+    </a>
   `,
   styles: [
     `
-
       .donut-card {
         display: flex;
         align-items: center;
@@ -57,6 +68,10 @@ import {Donut} from '../../models/donut.model';
         &-icon {
           width: 50px;
           margin-right: 10px;
+        }
+
+        &-promo {
+          border: 2px solid #eee;
         }
       }
     `

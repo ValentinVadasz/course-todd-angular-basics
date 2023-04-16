@@ -1,17 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Donut} from '../../models/donut.model';
 import {DonutService} from '../../services/donut.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DonutFormComponent} from '../../components/donut-form/donut-form.component';
 
 @Component({
   selector: 'donut-single',
+  standalone: true,
+  imports: [
+    DonutFormComponent
+  ],
   template: `
     <div>
       <donut-form
         [donut]="donut"
+        [isEdit]="isEdit"
         (create)="onCreate($event)"
         (update)="onUpdate($event)"
         (delete)="onDelete($event)">
-
       </donut-form>
     </div>
   `,
@@ -19,25 +25,41 @@ import {DonutService} from '../../services/donut.service';
 })
 export class DonutSingleComponent implements OnInit {
   donut!: Donut;
+  isEdit!: boolean;
 
-  constructor(private donutService: DonutService) {
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private donutService: DonutService) {
   }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
     this.donutService
-      .readOne('y8z0As')
+      .readOne(id)
       .subscribe((donut: Donut) => this.donut = donut);
+    this.isEdit = this.route.snapshot.data['isEdit'];
   }
 
   onCreate(donut: Donut) {
-    this.donutService.create(donut);
+    this.donutService
+      .create(donut)
+      .subscribe((donut) => {
+        console.log(donut.id);
+        this.router.navigate(['admin', 'donuts', donut.id])
+      });
   }
 
   onUpdate(donut: Donut) {
-    this.donutService.update(donut);
+    this.donutService.update(donut)
+      .subscribe({
+        next: () => this.router.navigate(['admin']),
+        error: err => console.log('onUpdate error:', err)
+      });
   }
 
   onDelete(donut: Donut) {
-    this.donutService.delete(donut);
+    this.donutService
+      .delete(donut)
+      .subscribe(() => this.router.navigate(['admin']));
   }
 }

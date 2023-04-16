@@ -1,9 +1,16 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgForm} from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
 import {Donut} from '../../models/donut.model';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'donut-form',
+  standalone: true,
+  imports: [
+    FormsModule,
+    NgIf,
+    NgForOf
+  ],
   template: `
     <form #form="ngForm" class="donut-form" *ngIf="donut; else loading">
       <label>
@@ -81,12 +88,14 @@ import {Donut} from '../../models/donut.model';
       </label>
       <button class="btn btn--green"
               type="button"
+              *ngIf="!isEdit"
               (click)="handleCreate(form)">
         Create
       </button>
 
       <button class="btn btn--green"
               type="button"
+              *ngIf="isEdit"
               [disabled]="!form.dirty"
               (click)="handleUpdate(form)">
         Update
@@ -94,12 +103,14 @@ import {Donut} from '../../models/donut.model';
 
       <button class="btn btn--red"
               type="button"
+              *ngIf="isEdit"
               (click)="handleDelete()">
         Delete
       </button>
 
       <button class="btn btn--grey"
               type="button"
+              *ngIf="isEdit"
               (click)="form.reset()">
         Reset Form
       </button>
@@ -149,6 +160,7 @@ import {Donut} from '../../models/donut.model';
 })
 export class DonutFormComponent {
   @Input() donut!: Donut;
+  @Input() isEdit!: boolean;
   @Output() create = new EventEmitter<Donut>();
   @Output() update = new EventEmitter<Donut>();
   @Output() delete = new EventEmitter<Donut>();
